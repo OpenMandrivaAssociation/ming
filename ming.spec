@@ -27,7 +27,6 @@ BuildRequires:  automake1.7
 BuildRequires:  multiarch-utils >= 1.0.3
 # gotta conflict here, otherwise stuff will be linked against installed libs...
 BuildConflicts:	ming-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 Ming is a c library for generating SWF ("Flash") format movies. This 
