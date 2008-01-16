@@ -15,6 +15,7 @@ Patch1:		ming-0.3-gcc4.diff
 Patch2:		ming-0.3.0-DESTDIR.diff
 Patch3:		ming-0.3.0-fpic.diff
 Patch4:		ming-0.3.0beta2-zeromicroversion.diff
+Patch5:		ming-perl-shared.patch
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  perl-devel
@@ -91,6 +92,7 @@ This package contains various ming utilities.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p0
+%patch5 -p0
 
 # fix attribs
 find . -type d -perm 0700 -exec chmod 755 {} \;
@@ -113,16 +115,19 @@ export WANT_AUTOCONF_2_5="1"
 rm -f configure
 libtoolize --copy --force; aclocal-1.7; autoconf --force
 
-export LIBS="-L{_libdir} -ljpeg -lpng12 -lz -lm -lgif"
+export LIBS="-L%{_libdir} -ljpeg -lpng12 -lz -lm -lgif"
 
 %configure2_5x
 
 make
 
+# weird "fix"
+cp ./src/ming.h .
+
 pushd perl_ext
-    perl Makefile.PL INSTALLDIRS=vendor LIBS="-L{_libdir} -ljpeg -lpng12 -lz -lm -lgif" </dev/null
+    perl Makefile.PL LIBS="$LIBS" INSTALLDIRS=vendor </dev/null
     make
-    make test
+#    make test
 popd
 
 pushd py_ext
@@ -219,5 +224,3 @@ chmod 755 %{buildroot}%{_bindir}/ming-config
 %attr(755,root,root) %{_bindir}/swftopython
 %attr(755,root,root) %{_bindir}/dbl2png
 %{_mandir}/man1/makeswf.1*
-
-
