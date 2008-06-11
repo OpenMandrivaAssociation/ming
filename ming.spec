@@ -4,7 +4,7 @@
 Summary:	Ming - an SWF output library
 Name:		ming
 Version:	0.3.0
-Release:	%mkrel 7
+Release:	%mkrel 8
 License:	LGPL
 Group:		System/Libraries
 URL:		http://ming.sourceforge.net/
@@ -16,6 +16,7 @@ Patch2:		ming-0.3.0-DESTDIR.diff
 Patch3:		ming-0.3.0-fpic.diff
 Patch4:		ming-0.3.0beta2-zeromicroversion.diff
 Patch5:		ming-perl-shared.patch
+Patch6:		ming-0.3.0-link_order_fix.diff
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  perl-devel
@@ -28,7 +29,7 @@ BuildRequires:  automake1.7
 BuildRequires:  multiarch-utils >= 1.0.3
 # gotta conflict here, otherwise stuff will be linked against installed libs...
 BuildConflicts:	ming-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Ming is a c library for generating SWF ("Flash") format movies. This 
@@ -93,6 +94,7 @@ This package contains various ming utilities.
 %patch3 -p1
 %patch4 -p0
 %patch5 -p0
+%patch6 -p0
 
 # fix attribs
 find . -type d -perm 0700 -exec chmod 755 {} \;
@@ -115,8 +117,6 @@ export WANT_AUTOCONF_2_5="1"
 rm -f configure
 libtoolize --copy --force; aclocal-1.7; autoconf --force
 
-export LIBS="-L%{_libdir} -ljpeg -lpng12 -lz -lm -lgif"
-
 %configure2_5x
 
 make
@@ -125,7 +125,7 @@ make
 cp ./src/ming.h .
 
 pushd perl_ext
-    perl Makefile.PL LIBS="$LIBS" INSTALLDIRS=vendor </dev/null
+    perl Makefile.PL LIBS="-L%{_libdir} -ljpeg -lpng12 -lz -lm -lgif" INSTALLDIRS=vendor </dev/null
     make
 #    make test
 popd
