@@ -1,5 +1,6 @@
 %define major 0
 %define libname %mklibname ming %{major}
+%define develname %mklibname ming -d
 
 Summary:	Ming - an SWF output library
 Name:		ming
@@ -43,7 +44,7 @@ Group:		System/Libraries
 Ming is a c library for generating SWF ("Flash") format movies.
 This package only contains the basic c-based library.
 
-%package -n	%{libname}-devel
+%package -n	%{develname}
 Summary:	Ming development files
 Group:		Development/C
 Requires:	zlib-devel
@@ -54,8 +55,9 @@ Requires:	X11-devel
 Requires:	%{libname} = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}
 Provides:	%{name}-devel = %{version}
+Obsoletes:	%{libname}-devel = %{version}
 
-%description -n	%{libname}-devel
+%description -n	%{develname}
 The %{name}-devel package contains the header files
 and static libraries necessary for developing programs using the
 %{name}-devel library (C and C++)..
@@ -159,9 +161,9 @@ rm -rf %{buildroot}%{perl_vendorlib}/*/auto/SWF/include
 find %{buildroot}%{perl_vendorlib} -name "*.so" | xargs chrpath -d
 
 chmod 755 %{buildroot}%{_bindir}/ming-config
-%if %mdkversion >= 1020
+
 %multiarch_binaries %{buildroot}%{_bindir}/ming-config
-%endif
+
 
 %if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
@@ -177,13 +179,11 @@ chmod 755 %{buildroot}%{_bindir}/ming-config
 %files -n %{libname}
 %defattr(-,root,root)
 %doc CREDITS ChangeLog HISTORY INSTALL README TODO
-%attr(0755,root,root) %{_libdir}/libming.so.*
+%attr(0755,root,root) %{_libdir}/libming.so.%{major}*
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr(644,root,root,755)
-%if %mdkversion >= 1020
 %multiarch %attr(755,root,root) %{multiarch_bindir}/ming-config
-%endif
 %attr(0755,root,root) %{_bindir}/ming-config
 %attr(0755,root,root) %{_libdir}/libming.so
 %attr(0644,root,root) %{_libdir}/libming.a
