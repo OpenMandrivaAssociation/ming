@@ -1,33 +1,36 @@
-%define major 0
+%define major 1
 %define libname %mklibname ming %{major}
 %define develname %mklibname ming -d
 
 Summary:	Ming - an SWF output library
 Name:		ming
-Version:	0.3.0
-Release:	%mkrel 10
+Version:	0.4.0
+Release:	%mkrel 0.rc1.1
 License:	LGPL
 Group:		System/Libraries
-URL:		http://ming.sourceforge.net/
-Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.bz2
-Source1:	http://prdownloads.sourceforge.net/ming/ming-perl-%{version}.tar.bz2
-Source2:	http://prdownloads.sourceforge.net/ming/ming-py-%{version}.tar.bz2
-Patch1:		ming-0.3-gcc4.diff
-Patch2:		ming-0.3.0-DESTDIR.diff
-Patch3:		ming-0.3.0-fpic.diff
-Patch4:		ming-0.3.0beta2-zeromicroversion.diff
-Patch5:		ming-perl-shared.patch
-Patch6:		ming-0.3.0-link_order_fix.diff
-BuildRequires:  bison
-BuildRequires:  flex
-BuildRequires:  perl-devel
-BuildRequires:  jpeg-devel
-BuildRequires:  png-devel
-BuildRequires:  ungif-devel
-BuildRequires:  python-devel
-BuildRequires:  chrpath
-BuildRequires:  automake1.7
-BuildRequires:  multiarch-utils >= 1.0.3
+URL:		http://www.libming.org/
+Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.rc1.tar.gz
+Patch0:		ming-linkage_fix.diff
+Patch1:		ming-zeromicroversion.diff
+Patch2:		ming-perl-shared.diff
+BuildRequires:	bison
+BuildRequires:	chrpath
+BuildRequires:	flex
+BuildRequires:	freetype2-devel
+BuildRequires:	jpeg-devel
+BuildRequires:	libice-devel
+BuildRequires:	libsm-devel
+BuildRequires:	libx11-devel
+BuildRequires:	libxau-devel
+BuildRequires:	libxdmcp-devel
+BuildRequires:	multiarch-utils >= 1.0.3
+BuildRequires:	perl-devel
+BuildRequires:	png-devel
+BuildRequires:	python
+BuildRequires:	python-devel
+BuildRequires:	ungif-devel
+BuildRequires:	xcb-devel
+BuildRequires:	zlib-devel
 # gotta conflict here, otherwise stuff will be linked against installed libs...
 BuildConflicts:	ming-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -90,13 +93,10 @@ This package contains various ming utilities.
 
 %prep
 
-%setup -q -n %{name}-%{version} -a1 -a2
+%setup -q -n %{name}-%{version}.rc1
+%patch0 -p0
 %patch1 -p0
-%patch2 -p1
-%patch3 -p1
-%patch4 -p0
-%patch5 -p0
-%patch6 -p0
+%patch2 -p0
 
 # fix attribs
 find . -type d -perm 0700 -exec chmod 755 {} \;
@@ -108,23 +108,17 @@ for i in `find . -type d -name CVS`  `find . -type d -name .svn` `find . -type f
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
 
-# fix source locations
-mv %{name}-%{version}/* .
-
 # fix python
 perl -pi -e "s|/usr/local/include\b|%{_includedir}|g;s|/usr/local/lib\b|%{_libdir}|g" py_ext/setup.py
 
 %build
 export WANT_AUTOCONF_2_5="1"
-rm -f configure
-libtoolize --copy --force; aclocal-1.7; autoconf --force
+rm -f configure macros/libtool.m4
+libtoolize --copy --force --automake; aclocal -I macros; autoheader -f; automake; autoconf
 
 %configure2_5x
 
-make
-
-# weird "fix"
-cp ./src/ming.h .
+%make
 
 pushd perl_ext
     perl Makefile.PL LIBS="-L%{_libdir} -ljpeg -lpng12 -lz -lm -lgif" INSTALLDIRS=vendor </dev/null
@@ -137,7 +131,7 @@ pushd py_ext
 popd
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %makeinstall_std
 
@@ -152,7 +146,7 @@ popd
 # fix docs
 cp perl_ext/README perl_ext.README
 cp util/README util.README
-chmod 644 CREDITS ChangeLog HISTORY INSTALL *README* TODO
+chmod 644 ChangeLog HISTORY INSTALL *README* TODO
 
 # cleanup
 rm -rf %{buildroot}%{perl_vendorlib}/*/auto/SWF/include
@@ -164,7 +158,6 @@ chmod 755 %{buildroot}%{_bindir}/ming-config
 
 %multiarch_binaries %{buildroot}%{_bindir}/ming-config
 
-
 %if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
 %endif
@@ -174,11 +167,11 @@ chmod 755 %{buildroot}%{_bindir}/ming-config
 %endif
 
 %clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files -n %{libname}
 %defattr(-,root,root)
-%doc CREDITS ChangeLog HISTORY INSTALL README TODO
+%doc ChangeLog HISTORY README TODO
 %attr(0755,root,root) %{_libdir}/libming.so.%{major}*
 
 %files -n %{develname}
@@ -186,8 +179,12 @@ chmod 755 %{buildroot}%{_bindir}/ming-config
 %multiarch %attr(755,root,root) %{multiarch_bindir}/ming-config
 %attr(0755,root,root) %{_bindir}/ming-config
 %attr(0755,root,root) %{_libdir}/libming.so
-%attr(0644,root,root) %{_libdir}/libming.a
+%attr(0644,root,root) %{_libdir}/libming.*a
+%attr(0644,root,root) %{_libdir}/pkgconfig/libming.pc
 %{_includedir}/*
+%{_mandir}/man3/Ming_*
+%{_mandir}/man3/destroySWFMovie.3*
+%{_mandir}/man3/newSWF*
 
 %files -n perl-SWF
 %defattr(-,root,root)
@@ -209,6 +206,7 @@ chmod 755 %{buildroot}%{_bindir}/ming-config
 %files -n %{name}-utils
 %defattr(644,root,root,755)
 %doc util.README
+%attr(755,root,root) %{_bindir}/dbl2png
 %attr(755,root,root) %{_bindir}/gif2dbl
 %attr(755,root,root) %{_bindir}/gif2mask
 %attr(755,root,root) %{_bindir}/listaction
@@ -223,8 +221,9 @@ chmod 755 %{buildroot}%{_bindir}/ming-config
 %attr(755,root,root) %{_bindir}/png2dbl
 %attr(755,root,root) %{_bindir}/png2swf
 %attr(755,root,root) %{_bindir}/raw2adpcm
+%attr(755,root,root) %{_bindir}/swftocxx
 %attr(755,root,root) %{_bindir}/swftoperl
 %attr(755,root,root) %{_bindir}/swftophp
 %attr(755,root,root) %{_bindir}/swftopython
-%attr(755,root,root) %{_bindir}/dbl2png
+%attr(755,root,root) %{_bindir}/swftotcl
 %{_mandir}/man1/makeswf.1*
