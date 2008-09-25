@@ -4,14 +4,13 @@
 
 Summary:	Ming - an SWF output library
 Name:		ming
-Version:	0.4.0
-Release:	%mkrel 0.rc1.1
+Version:	0.4.2
+Release:	%mkrel 1
 License:	LGPL
 Group:		System/Libraries
 URL:		http://www.libming.org/
-Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.rc1.tar.gz
+Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.gz
 Patch0:		ming-linkage_fix.diff
-Patch1:		ming-zeromicroversion.diff
 Patch2:		ming-perl-shared.diff
 BuildRequires:	bison
 BuildRequires:	chrpath
@@ -93,9 +92,8 @@ This package contains various ming utilities.
 
 %prep
 
-%setup -q -n %{name}-%{version}.rc1
+%setup -q -n %{name}-%{version}
 %patch0 -p0
-%patch1 -p0
 %patch2 -p0
 
 # fix attribs
@@ -209,6 +207,7 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_bindir}/dbl2png
 %attr(755,root,root) %{_bindir}/gif2dbl
 %attr(755,root,root) %{_bindir}/gif2mask
+%attr(755,root,root) %{_bindir}/img2swf
 %attr(755,root,root) %{_bindir}/listaction
 %attr(755,root,root) %{_bindir}/listaction_d
 %attr(755,root,root) %{_bindir}/listfdb
@@ -219,7 +218,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_bindir}/makefdb
 %attr(755,root,root) %{_bindir}/makeswf
 %attr(755,root,root) %{_bindir}/png2dbl
-%attr(755,root,root) %{_bindir}/png2swf
 %attr(755,root,root) %{_bindir}/raw2adpcm
 %attr(755,root,root) %{_bindir}/swftocxx
 %attr(755,root,root) %{_bindir}/swftoperl
