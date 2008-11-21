@@ -1,3 +1,7 @@
+%if %mdkversion < 200610
+%define py_platsitedir %{_libdir}/python%{pyver}/site-packages/
+%endif
+
 %define major 1
 %define libname %mklibname ming %{major}
 %define develname %mklibname ming -d
@@ -5,7 +9,7 @@
 Summary:	Ming - an SWF output library
 Name:		ming
 Version:	0.4.2
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	LGPL
 Group:		System/Libraries
 URL:		http://www.libming.org/
