@@ -5,7 +5,7 @@
 Summary:	Ming - an SWF output library
 Name:		ming
 Version:	0.4.2
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	LGPL
 Group:		System/Libraries
 URL:		http://www.libming.org/
@@ -17,19 +17,23 @@ BuildRequires:	chrpath
 BuildRequires:	flex
 BuildRequires:	freetype2-devel
 BuildRequires:	jpeg-devel
-BuildRequires:	libice-devel
-BuildRequires:	libsm-devel
-BuildRequires:	libx11-devel
-BuildRequires:	libxau-devel
-BuildRequires:	libxdmcp-devel
 BuildRequires:	multiarch-utils >= 1.0.3
 BuildRequires:	perl-devel
 BuildRequires:	png-devel
 BuildRequires:	python
 BuildRequires:	python-devel
 BuildRequires:	ungif-devel
-BuildRequires:	xcb-devel
 BuildRequires:	zlib-devel
+%if %mdkversion >= 200800
+BuildRequires:	libice-devel
+BuildRequires:	libsm-devel
+BuildRequires:	libx11-devel
+BuildRequires:	libxau-devel
+BuildRequires:	libxdmcp-devel
+BuildRequires:	xcb-devel
+%else
+BuildRequires:	X11-devel
+%endif
 # gotta conflict here, otherwise stuff will be linked against installed libs...
 BuildConflicts:	ming-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -199,7 +203,9 @@ rm -rf %{buildroot}
 %doc py_ext/README
 %{py_platsitedir}/*.so
 %{py_platsitedir}/*.py*
+%if %mdkversion >= 200700
 %{py_platsitedir}/*.egg-info
+%endif
 
 %files -n %{name}-utils
 %defattr(644,root,root,755)
