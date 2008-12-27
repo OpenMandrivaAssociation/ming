@@ -16,6 +16,7 @@ URL:		http://www.libming.org/
 Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.gz
 Patch0:		ming-linkage_fix.diff
 Patch2:		ming-perl-shared.diff
+Patch3:		ming-0.4.2-fix-str-fmt.patch
 BuildRequires:	bison
 BuildRequires:	chrpath
 BuildRequires:	flex
@@ -99,10 +100,10 @@ Requires:	%{libname} = %{version}-%{release}
 This package contains various ming utilities.
 
 %prep
-
 %setup -q -n %{name}-%{version}
 %patch0 -p0
 %patch2 -p0
+%patch3 -p0
 
 # fix attribs
 find . -type d -perm 0700 -exec chmod 755 {} \;
