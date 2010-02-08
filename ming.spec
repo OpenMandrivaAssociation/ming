@@ -27,7 +27,7 @@ BuildRequires:	perl-devel
 BuildRequires:	png-devel
 BuildRequires:	python
 BuildRequires:	python-devel
-BuildRequires:	libgif-devel
+BuildRequires:	giflib-devel
 BuildRequires:	zlib-devel
 %if %mdkversion >= 200800
 BuildRequires:	libice-devel
