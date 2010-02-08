@@ -8,15 +8,15 @@
 
 Summary:	Ming - an SWF output library
 Name:		ming
-Version:	0.4.2
-Release:	%mkrel 7
+Version:	0.4.3
+Release:	%mkrel 1
 License:	LGPL
 Group:		System/Libraries
 URL:		http://www.libming.org/
-Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.gz
-Patch0:		ming-linkage_fix.diff
+Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.bz2
+Patch0:		ming-0.4.3-fix-linkage.patch
 Patch2:		ming-perl-shared.diff
-Patch3:		ming-0.4.2-fix-str-fmt.patch
+#Patch3:		ming-0.4.2-fix-str-fmt.patch
 BuildRequires:	bison
 BuildRequires:	chrpath
 BuildRequires:	flex
@@ -27,7 +27,7 @@ BuildRequires:	perl-devel
 BuildRequires:	png-devel
 BuildRequires:	python
 BuildRequires:	python-devel
-BuildRequires:	ungif-devel
+BuildRequires:	libgif-devel
 BuildRequires:	zlib-devel
 %if %mdkversion >= 200800
 BuildRequires:	libice-devel
@@ -103,7 +103,7 @@ This package contains various ming utilities.
 %setup -q -n %{name}-%{version}
 %patch0 -p0
 %patch2 -p0
-%patch3 -p0
+#%patch3 -p0
 
 # fix attribs
 find . -type d -perm 0700 -exec chmod 755 {} \;
@@ -189,9 +189,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_libdir}/libming.*a
 %attr(0644,root,root) %{_libdir}/pkgconfig/libming.pc
 %{_includedir}/*
-%{_mandir}/man3/Ming_*
-%{_mandir}/man3/destroySWFMovie.3*
-%{_mandir}/man3/newSWF*
+#%{_mandir}/man3/Ming_*
+#%{_mandir}/man3/destroySWFMovie.3*
+#%{_mandir}/man3/newSWF*
 
 %files -n perl-SWF
 %defattr(-,root,root)
@@ -218,7 +218,7 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_bindir}/dbl2png
 %attr(755,root,root) %{_bindir}/gif2dbl
 %attr(755,root,root) %{_bindir}/gif2mask
-%attr(755,root,root) %{_bindir}/img2swf
+#%attr(755,root,root) %{_bindir}/img2swf
 %attr(755,root,root) %{_bindir}/listaction
 %attr(755,root,root) %{_bindir}/listaction_d
 %attr(755,root,root) %{_bindir}/listfdb
@@ -235,4 +235,4 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_bindir}/swftophp
 %attr(755,root,root) %{_bindir}/swftopython
 %attr(755,root,root) %{_bindir}/swftotcl
-%{_mandir}/man1/makeswf.1*
+#%{_mandir}/man1/makeswf.1*
