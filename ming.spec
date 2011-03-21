@@ -1,7 +1,3 @@
-%if %mdkversion < 200610
-%define py_platsitedir %{_libdir}/python%{pyver}/site-packages/
-%endif
-
 %define major 1
 %define libname %mklibname ming %{major}
 %define develname %mklibname ming -d
@@ -9,7 +5,7 @@
 Summary:	Ming - an SWF output library
 Name:		ming
 Version:	0.4.3
-Release:	%mkrel 4
+Release:	%mkrel 5
 License:	LGPL
 Group:		System/Libraries
 URL:		http://www.libming.org/
@@ -29,16 +25,6 @@ BuildRequires:	python
 BuildRequires:	python-devel
 BuildRequires:	giflib-devel
 BuildRequires:	zlib-devel
-%if %mdkversion >= 200800
-BuildRequires:	libice-devel
-BuildRequires:	libsm-devel
-BuildRequires:	libx11-devel
-BuildRequires:	libxau-devel
-BuildRequires:	libxdmcp-devel
-BuildRequires:	xcb-devel
-%else
-BuildRequires:	X11-devel
-%endif
 # gotta conflict here, otherwise stuff will be linked against installed libs...
 BuildConflicts:	ming-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -58,13 +44,7 @@ This package only contains the basic c-based library.
 %package -n	%{develname}
 Summary:	Ming development files
 Group:		Development/C
-Requires:	zlib-devel
-Requires:	perl-devel
-Requires:	png-devel
-Requires:	ungif-devel
-Requires:	X11-devel
 Requires:	%{libname} = %{version}-%{release}
-Provides:	lib%{name}-devel = %{version}
 Provides:	%{name}-devel = %{version}
 Obsoletes:	%{libname}-devel = %{version}
 
@@ -119,10 +99,7 @@ done
 perl -pi -e "s|/usr/local/include\b|%{_includedir}|g;s|/usr/local/lib\b|%{_libdir}|g" py_ext/setup.py
 
 %build
-export WANT_AUTOCONF_2_5="1"
-rm -f configure macros/libtool.m4
-libtoolize --copy --force --automake; aclocal -I macros; autoheader -f; automake; autoconf
-
+autoreconf -fi
 %configure2_5x
 
 %make
