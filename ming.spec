@@ -5,14 +5,13 @@
 Summary:	Ming - an SWF output library
 Name:		ming
 Version:	0.4.3
-Release:	%mkrel 5
+Release:	%mkrel 6
 License:	LGPL
 Group:		System/Libraries
 URL:		http://www.libming.org/
 Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.bz2
 Patch0:		ming-0.4.3-fix-linkage.patch
 Patch2:		ming-perl-shared.diff
-#Patch3:		ming-0.4.2-fix-str-fmt.patch
 BuildRequires:	bison
 BuildRequires:	chrpath
 BuildRequires:	flex
@@ -25,6 +24,7 @@ BuildRequires:	python
 BuildRequires:	python-devel
 BuildRequires:	giflib-devel
 BuildRequires:	zlib-devel
+BuildRequires:	libx11-devel
 # gotta conflict here, otherwise stuff will be linked against installed libs...
 BuildConflicts:	ming-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -83,7 +83,6 @@ This package contains various ming utilities.
 %setup -q -n %{name}-%{version}
 %patch0 -p0
 %patch2 -p0
-#%patch3 -p0
 
 # fix attribs
 find . -type d -perm 0700 -exec chmod 755 {} \;
