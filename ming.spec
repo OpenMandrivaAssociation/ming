@@ -5,7 +5,7 @@
 Summary:	Ming - an SWF output library
 Name:		ming
 Version:	0.4.3
-Release:	%mkrel 6
+Release:	%mkrel 7
 License:	LGPL
 Group:		System/Libraries
 URL:		http://www.libming.org/
@@ -17,7 +17,6 @@ BuildRequires:	chrpath
 BuildRequires:	flex
 BuildRequires:	freetype2-devel
 BuildRequires:	jpeg-devel
-BuildRequires:	multiarch-utils >= 1.0.3
 BuildRequires:	perl-devel
 BuildRequires:	png-devel
 BuildRequires:	python
@@ -159,7 +158,7 @@ rm -rf %{buildroot}
 
 %files -n %{develname}
 %defattr(644,root,root,755)
-%multiarch %attr(755,root,root) %{multiarch_bindir}/ming-config
+%attr(755,root,root) %{multiarch_bindir}/ming-config
 %attr(0755,root,root) %{_bindir}/ming-config
 %attr(0755,root,root) %{_libdir}/libming.so
 %attr(0644,root,root) %{_libdir}/libming.*a
