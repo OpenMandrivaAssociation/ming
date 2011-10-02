@@ -12,6 +12,8 @@ URL:		http://www.libming.org/
 Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.bz2
 Patch0:		ming-0.4.3-fix-linkage.patch
 Patch2:		ming-perl-shared.diff
+BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	bison
 BuildRequires:	chrpath
 BuildRequires:	flex
