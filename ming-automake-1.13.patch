@@ -1,0 +1,11 @@
+--- ming-0.4.4/configure.in.bero	2013-01-16 01:15:55.518385878 +0100
++++ ming-0.4.4/configure.in	2013-01-16 01:16:04.204283171 +0100
+@@ -373,7 +373,7 @@ AC_SUBST(MINOR_VERSION)
+ AC_SUBST(MICRO_VERSION)
+ AC_SUBST(MING_VERSION)
+ 
+-AM_CONFIG_HEADER(src/ming_config.h)
++AC_CONFIG_HEADERS([src/ming_config.h])
+ AH_TOP(
+ #ifndef __MING_CONFIG_H
+ #define __MING_CONFIG_H

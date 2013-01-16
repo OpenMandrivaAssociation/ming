@@ -13,6 +13,7 @@ Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.bz2
 Patch1:		05_shared_perl
 Patch2:		07-GvCV-isn-t-an-lvalue-since-Perl-5.13.10.patch
 Patch3:		ming-0.4.4-vasprintf.patch
+Patch4:		ming-automake-1.13.patch
 BuildRequires:	autoconf automake libtool
 BuildRequires:	bison
 BuildRequires:	chrpath
@@ -79,9 +80,7 @@ This package contains various ming utilities.
 
 %prep
 %setup -q
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
+%apply_patches
 
 # fix attribs
 find . -type d -perm 0700 -exec chmod 755 {} \;
