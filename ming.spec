@@ -4,17 +4,14 @@
 
 Summary:	Ming - an SWF output library
 Name:		ming
-Version:	0.4.4
-Release:	7
-License:	LGPLv2
+Version:	0.4.5
+Release:	1
+License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.libming.org/
 Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.bz2
-Patch1:		05_shared_perl
-Patch2:		07-GvCV-isn-t-an-lvalue-since-Perl-5.13.10.patch
-Patch3:		ming-0.4.4-vasprintf.patch
-Patch4:		ming-automake-1.13.patch
-Patch5:		ming-0.4.4-giflib5.patch
+Patch0:		ming-automake-1.13.patch
+Patch1:		ming-0.4.5-giflib51.patch
 BuildRequires:	bison
 BuildRequires:	chrpath
 BuildRequires:	flex

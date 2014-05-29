@@ -1,0 +1,134 @@
+diff -urN ming-0.4.5/src/blocks/gifdbl.c ming-0.4.5-patched/src/blocks/gifdbl.c
+--- ming-0.4.5/src/blocks/gifdbl.c	2010-10-10 18:19:23.000000000 +1100
++++ ming-0.4.5-patched/src/blocks/gifdbl.c	2014-05-29 23:22:41.569861920 +1100
+@@ -32,6 +32,7 @@
+ #include <gif_lib.h>
+ #include <zlib.h>
+ 
++static int gif_error = 0;
+ 
+ /*void error(char *msg)
+ {
+@@ -203,7 +204,11 @@
+ 	}
+ 
+ 	/* Done! */
++#if GIFLIB_MAJOR * 100 + GIFLIB_MINOR >= 501
++	DGifCloseFile(file, NULL);
++#else
+ 	DGifCloseFile(file);
++#endif
+ 
+ 	result->data = malloc(outsize = (int)floor(size*1.01+12));
+ 
+@@ -227,7 +232,11 @@
+ 	SWFDBLBitmapData ret;
+ 	struct dbl_data gifdata;
+ 
++#if GIFLIB_MAJOR >= 5
++	if((file = DGifOpenFileName(fileName, &gif_error)) == NULL)
++#else
+ 	if((file = DGifOpenFileName(fileName)) == NULL)
++#endif
+ 		return NULL;
+ 	if(!readGif(file, &gifdata))
+ 		return NULL;
+@@ -246,7 +255,11 @@
+ 	SWFDBLBitmapData ret;
+ 	struct dbl_data gifdata;
+ 
++#if GIFLIB_MAJOR >= 5
++	if((file = DGifOpen(input, (InputFunc) gifReadFunc, &gif_error)) == NULL)
++#else
+ 	if((file = DGifOpen(input, (InputFunc) gifReadFunc)) == NULL)
++#endif
+ 		return NULL;
+ 	if(!readGif(file, &gifdata))
+ 		return NULL;
+diff -urN ming-0.4.5/src/libming.h ming-0.4.5-patched/src/libming.h
+--- ming-0.4.5/src/libming.h	2013-06-09 01:08:51.000000000 +1100
++++ ming-0.4.5-patched/src/libming.h	2014-05-29 23:25:53.723871499 +1100
+@@ -77,6 +77,7 @@
+ #endif
+ 
+ #if GIFLIB_GIFERRORSTRING
++#include <gif_lib.h>
+ static void
+ PrintGifError(void)
+ {
+diff -urN ming-0.4.5/util/gif2dbl.c ming-0.4.5-patched/util/gif2dbl.c
+--- ming-0.4.5/util/gif2dbl.c	2013-06-09 01:08:51.000000000 +1100
++++ ming-0.4.5-patched/util/gif2dbl.c	2014-05-29 23:20:57.370229719 +1100
+@@ -19,10 +19,16 @@
+ 
+ #include "libming.h"
+ 
++static int gif_error = 0;
++
+ void error(char *msg)
+ {
+   printf("%s:\n\n", msg);
++#if GIFLIB_MAJOR >= 5
++  printf("%s\n", GifErrorString(gif_error));
++#else
+   PrintGifError();
++#endif
+   exit(-1);
+ }
+ 
+@@ -59,7 +65,11 @@
+   unsigned char *p;
+   int i, nColors, size, alpha, bgColor, alignedWidth;
+ 
++#if GIFLIB_MAJOR >= 5
++  if((file = DGifOpenFileName(fileName, &gif_error)) == NULL)
++#else
+   if((file = DGifOpenFileName(fileName)) == NULL)
++#endif
+     error("Error opening file");
+ 
+   if(DGifSlurp(file) != GIF_OK)
+@@ -190,7 +200,11 @@
+   }
+ 
+ 	/* Done! */
++#if GIFLIB_MAJOR * 100 + GIFLIB_MINOR >= 501
++  DGifCloseFile(file, NULL);
++#else
+   DGifCloseFile(file);
++#endif
+ 
+   *length = size;
+   return data;
+diff -urN ming-0.4.5/util/gif2mask.c ming-0.4.5-patched/util/gif2mask.c
+--- ming-0.4.5/util/gif2mask.c	2013-06-09 01:08:51.000000000 +1100
++++ ming-0.4.5-patched/util/gif2mask.c	2014-05-29 23:24:52.083906123 +1100
+@@ -13,10 +13,16 @@
+ 
+ #define max(a,b,c) (((a)>(b))?(((c)>(a))?(c):(a)):(((c)>(b))?(c):(b)))
+ 
++static int gif_error = 0;
++
+ void error(char *msg)
+ {
+   printf("%s:\n\n", msg);
++#if GIFLIB_MAJOR >= 5
++  printf("%s\n", GifErrorString(gif_error));
++#else
+   PrintGifError();
++#endif
+   exit(-1);
+ }
+ 
+@@ -28,7 +34,11 @@
+   unsigned char *data;
+   int i, nColors, size;
+ 
++#if GIFLIB_MAJOR >= 5
++  if((file = DGifOpenFileName(fileName, &gif_error)) == NULL)
++#else
+   if((file = DGifOpenFileName(fileName)) == NULL)
++#endif
+     error("Error opening file");
+ 
+   if(DGifSlurp(file) != GIF_OK)
