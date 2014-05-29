@@ -1,6 +1,6 @@
 diff -urN ming-0.4.5/src/blocks/gifdbl.c ming-0.4.5-patched/src/blocks/gifdbl.c
 --- ming-0.4.5/src/blocks/gifdbl.c	2010-10-10 18:19:23.000000000 +1100
-+++ ming-0.4.5-patched/src/blocks/gifdbl.c	2014-05-29 23:22:41.569861920 +1100
++++ ming-0.4.5-patched/src/blocks/gifdbl.c	2014-05-30 00:21:43.942497701 +1100
 @@ -32,6 +32,7 @@
  #include <gif_lib.h>
  #include <zlib.h>
@@ -47,8 +47,8 @@ diff -urN ming-0.4.5/src/blocks/gifdbl.c ming-0.4.5-patched/src/blocks/gifdbl.c
  		return NULL;
 diff -urN ming-0.4.5/src/libming.h ming-0.4.5-patched/src/libming.h
 --- ming-0.4.5/src/libming.h	2013-06-09 01:08:51.000000000 +1100
-+++ ming-0.4.5-patched/src/libming.h	2014-05-29 23:25:53.723871499 +1100
-@@ -77,6 +77,7 @@
++++ ming-0.4.5-patched/src/libming.h	2014-05-30 00:25:37.784121930 +1100
+@@ -77,10 +77,16 @@
  #endif
  
  #if GIFLIB_GIFERRORSTRING
@@ -56,9 +56,18 @@ diff -urN ming-0.4.5/src/libming.h ming-0.4.5-patched/src/libming.h
  static void
  PrintGifError(void)
  {
++#if GIFLIB_MAJOR >= 5
++// Shouldn't be used with giflib5 anyway
++	fprintf(stderr, "\nGIF-LIB error.\n");
++#else
+ 	fprintf(stderr, "\nGIF-LIB error: %s.\n", GifErrorString());
++#endif
+ }
+ #endif
+ 
 diff -urN ming-0.4.5/util/gif2dbl.c ming-0.4.5-patched/util/gif2dbl.c
 --- ming-0.4.5/util/gif2dbl.c	2013-06-09 01:08:51.000000000 +1100
-+++ ming-0.4.5-patched/util/gif2dbl.c	2014-05-29 23:20:57.370229719 +1100
++++ ming-0.4.5-patched/util/gif2dbl.c	2014-05-30 00:21:43.942497701 +1100
 @@ -19,10 +19,16 @@
  
  #include "libming.h"
@@ -102,7 +111,7 @@ diff -urN ming-0.4.5/util/gif2dbl.c ming-0.4.5-patched/util/gif2dbl.c
    return data;
 diff -urN ming-0.4.5/util/gif2mask.c ming-0.4.5-patched/util/gif2mask.c
 --- ming-0.4.5/util/gif2mask.c	2013-06-09 01:08:51.000000000 +1100
-+++ ming-0.4.5-patched/util/gif2mask.c	2014-05-29 23:24:52.083906123 +1100
++++ ming-0.4.5-patched/util/gif2mask.c	2014-05-30 00:21:43.942497701 +1100
 @@ -13,10 +13,16 @@
  
  #define max(a,b,c) (((a)>(b))?(((c)>(a))?(c):(a)):(((c)>(b))?(c):(b)))
