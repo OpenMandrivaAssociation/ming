@@ -5,7 +5,7 @@
 Summary:	Ming - an SWF output library
 Name:		ming
 Version:	0.4.5
-Release:	2
+Release:	3
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.libming.org/
