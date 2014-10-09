@@ -21,7 +21,7 @@ BuildRequires:	giflib-devel
 BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(libpng)
-BuildRequires:	pkgconfig(python3)
+BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(zlib)
 # gotta conflict here, otherwise stuff will be linked against installed libs...
@@ -103,7 +103,7 @@ pushd perl_ext
 popd
 
 pushd py_ext
-    env CFLAGS="%{optflags}" python setup.py build
+    env CFLAGS="%{optflags}" %__python2 setup.py build
 popd
 
 %install
@@ -114,7 +114,7 @@ popd
 
 # install the python extension
 pushd py_ext
-    python setup.py install --root=%{buildroot}
+    %__python2 setup.py install --root=%{buildroot}
 popd
 
 # fix docs
@@ -127,6 +127,7 @@ rm -rf %{buildroot}%{perl_vendorlib}/*/auto/SWF/include
 rm -rf %{buildroot}%{_libdir}/libming.*a
 
 # nuke rpath
+find %{buildroot}%{perl_vendorlib} -name "*.so" | xargs chmod u+w 
 find %{buildroot}%{perl_vendorlib} -name "*.so" | xargs chrpath -d
 
 chmod 755 %{buildroot}%{_bindir}/ming-config
@@ -159,9 +160,9 @@ install -m0644 docs/man/*.1 %{buildroot}%{_mandir}/man1/
 
 %files -n python-SWF
 %doc py_ext/README
-%{py_platsitedir}/*.so
-%{py_platsitedir}/*.py*
-%{py_platsitedir}/*.egg-info
+%{py2_platsitedir}/*.so
+%{py2_platsitedir}/*.py*
+%{py2_platsitedir}/*.egg-info
 
 %files -n %{name}-utils
 %doc util.README
