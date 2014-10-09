@@ -21,7 +21,7 @@ BuildRequires:	giflib-devel
 BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(libpng)
-BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(zlib)
 # gotta conflict here, otherwise stuff will be linked against installed libs...
