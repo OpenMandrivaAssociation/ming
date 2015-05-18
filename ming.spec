@@ -5,7 +5,7 @@
 Summary:	Ming - an SWF output library
 Name:		ming
 Version:	0.4.5
-Release:	5
+Release:	6
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://www.libming.org/
@@ -90,7 +90,7 @@ perl -pi -e "s|/usr/local/include\b|%{_includedir}|g;s|/usr/local/lib\b|%{_libdi
 autoreconf -fi
 
 %build
-%configure2_5x \
+%configure \
 	--enable-shared \
 	--disable-static
 
