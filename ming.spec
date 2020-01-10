@@ -73,7 +73,7 @@ This package contains various ming utilities.
 
 %prep
 %setup -q
-%apply_patches
+%autopatch -p1
 
 # fix attribs
 find . -type d -perm 0700 -exec chmod 755 {} \;
