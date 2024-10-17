@@ -8,7 +8,7 @@ Version:	0.4.5
 Release:	8
 License:	LGPLv2+
 Group:		System/Libraries
-Url:		http://www.libming.org/
+Url:		https://www.libming.org/
 Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.bz2
 Patch0:		ming-automake-1.13.patch
 Patch1:		ming-0.4.5-giflib51.patch
