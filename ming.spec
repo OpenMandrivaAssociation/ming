@@ -12,6 +12,11 @@ Url:		https://www.libming.org/
 Source0:	http://prdownloads.sourceforge.net/ming/%{name}-%{version}.tar.bz2
 Patch0:		ming-automake-1.13.patch
 Patch1:		ming-0.4.5-giflib51.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	bison
 BuildRequires:	chrpath
 BuildRequires:	flex
